@@ -5,6 +5,7 @@ import com.example.bestever.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 
 @RestController
 @RequestMapping("/students")
+@CrossOrigin(origins = {"http://localhost:4200"})
 public class StudentController {
 
     private final Logger LOG = LoggerFactory.getLogger(getClass());
@@ -44,12 +47,23 @@ public class StudentController {
     }
 
     @PostMapping("/save")
-    public void save(@Valid @RequestBody Student student){
+    public void save(@Valid @RequestBody Student student) {
         final Instant startTime = Instant.now();
 
         studentService.save(student);
 
         LOG.info("Time taken to save student {} is {}ms",
                 student, Duration.between(startTime, Instant.now()).toMillis());
+    }
+
+    @GetMapping("/getAll")
+    public List<Student> getAll() {
+        final Instant startTime = Instant.now();
+
+        final List<Student> students = studentService.findAll();
+
+        LOG.info("Time taken to get all students is {}ms", Duration.between(startTime, Instant.now()).toMillis());
+
+        return students;
     }
 }

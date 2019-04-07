@@ -24,9 +24,9 @@ class StudentControllerTest {
     @Test
     void findById() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/students/find")
-                .param("id", "10001"))
+                .param("id", "1"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{'id': 10001,'name': 'Ranga','passportNumber': 'E1234567'}"));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
 
     }
 
@@ -46,5 +46,13 @@ class StudentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtils.asString(student)))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void getAll() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/students/getAll"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
     }
 }
